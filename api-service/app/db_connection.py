@@ -8,7 +8,7 @@ class MysqlManager:
     def __init__(self):
         if not MysqlManager.cnx:
             MysqlManager.cnx = mysql.connector.connect(
-                host="localhost",
+                host="mysql",
                 port=3306,
                 user='root',
                 password='root',
