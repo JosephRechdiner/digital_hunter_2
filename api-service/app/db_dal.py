@@ -1,6 +1,9 @@
 from mysql.connector import MySQLConnection
 
 class MysqlDal:
+    """
+    Responsible for creating dal operations on MySQL database
+    """
     # 1
     @staticmethod
     def get_quality_targets(cnx: MySQLConnection):
@@ -17,6 +20,9 @@ class MysqlDal:
     # 2
     @staticmethod
     def get_signal_type_count(cnx: MySQLConnection):
+        """
+        Followed instructions
+        """
         query = """
                 SELECT signal_type, COUNT(*) AS count
                 FROM intel_signals
@@ -31,6 +37,9 @@ class MysqlDal:
     # 3
     @staticmethod
     def get_new_targets(cnx: MySQLConnection):
+        """
+        Followed instructions
+        """
         query = """
                 SELECT entity_id, COUNT(*) AS count
                 FROM intel_signals
@@ -47,6 +56,9 @@ class MysqlDal:
     # 4
     @staticmethod
     def get_dangerous_targets(cnx: MySQLConnection):
+        """
+        Followed instructions
+        """
         query = """
             WITH temp1 AS (
                 SELECT entity_id, MAX(distance_from_last) AS max_distance
@@ -79,6 +91,9 @@ class MysqlDal:
     # 5    
     @staticmethod
     def get_target_coords(entity_id: str, cnx: MySQLConnection):
+        """
+        Followed instructions
+        """
         query = """
                 SELECT created_at, reported_lat, reported_lon
                 FROM intel_signals

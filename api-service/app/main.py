@@ -5,6 +5,10 @@ from app.routes import router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    """
+    Function that runs as server comes up.
+    initialize app instances
+    """
     app.state.mysql_manager = MysqlManager()
     yield
 

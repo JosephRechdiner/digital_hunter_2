@@ -10,9 +10,15 @@ import io
 # UTILS
 # ------------------------------------------------------------
 def get_mysql_manager(request: Request):
+    """
+    Return app instance
+    """
     return request.app.state.mysql_manager
 
 def extract_lat_and_lon(coords: dict):
+    """
+    Simplfy MySQL query result to tuple of lists for matplotlib presentation
+    """
     lat = [coord['reported_lat'] for coord in coords]
     lon = [coord['reported_lon'] for coord in coords]
     return lat, lon
