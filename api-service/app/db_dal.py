@@ -62,7 +62,7 @@ class MysqlDal:
         query = """
             WITH temp1 AS (
                 SELECT entity_id, MAX(distance_from_last) AS max_distance
-                from intel_signals
+                FROM intel_signals
                 WHERE HOUR(timestamp) BETWEEN 8 AND 19
                 GROUP BY entity_id
                 HAVING max_distance = 0
@@ -95,12 +95,62 @@ class MysqlDal:
         Followed instructions
         """
         query = """
-                SELECT created_at, reported_lat, reported_lon
+                SELECT timestamp, reported_lat, reported_lon
                 FROM intel_signals
                 WHERE entity_id = %s
-                ORDER BY created_at ASC;
+                ORDER BY timestamp ASC;
                 """
         with cnx.cursor(dictionary=True) as cursor:
             cursor.execute(query, (entity_id,))
+            result = cursor.fetchall()
+        return result
+    
+    # 6
+    # BONUS
+    @staticmethod
+    def get_runaway_tragets(cnx: MySQLConnection):
+        """
+        Did not finish
+        """
+        query = """
+                WITH not_destroyed AS (
+                    SELECT signal_id, timestamp AS signal_time, entity_id, reported_lat, reported_lon
+                    FROM intel_signals
+                    WHERE entity_id IN (
+                        SELECT DISTINCT damage_assessments.entity_id
+                        FROM damage_assessments
+                        JOIN attacks
+                        ON damage_assessments.entity_id = attacks.entity_id
+                        WHERE damage_assessments.result != 'destroyed'
+                        )
+                    ),
+                attackes_merged AS (
+                    SELECT not_destroyed.*, attacks.timestamp AS attack_time
+                    FROM attacks
+                    JOIN not_destroyed
+                    ON attacks.entity_id = not_destroyed.entity_id
+                    ORDER BY attacks.timestamp
+                ),
+                less_then_3 AS (
+                    SELECT DISTINCT signal_id
+                    FROM attackes_merged
+                    WHERE (HOUR(attack_time) - HOUR(signal_time)) BETWEEN 0 AND 3
+                ),
+                more_then_3 AS (
+                    SELECT DISTINCT signal_id
+                    FROM attackes_merged
+                    WHERE HOUR(signal_time) - HOUR(attack_time) BETWEEN 0 AND 3
+                ),
+                calculated_less_then_3 AS (
+                    SELECT *
+                    FROM intel_signals
+                    WHERE signal_id IN (
+                        SELECT * FROM more_then_3
+                    )
+                )
+                select * from calculated_less_then_3;
+                """
+        with cnx.cursor(dictionary=True) as cursor:
+            cursor.execute(query)
             result = cursor.fetchall()
         return result
