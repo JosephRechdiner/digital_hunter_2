@@ -18,7 +18,7 @@ docker compose up --build
 ---
 
 # Stucture
-Ingestion-service is not used in production only for local test uses.
+local-service contains given files and is not used in production only for local test uses.
 I copied dump.sql to the root directory for db initialization and created new docker-compose file.
 
 Api-service is the main application.

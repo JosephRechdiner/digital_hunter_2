@@ -68,11 +68,16 @@ coords = get_target_route('TGT-007', cnx)
 # print(coords)
 lat, lon = extract_lat_and_lon(coords)
 
-xpoints = np.array(lon)
-ypoints = np.array(lat)
+
+xpoints = np.array([35.508206,35.495939,35.501812,35.515418])
+ypoints = np.array([32.289752,32.290667,32.2929,32.295535])
 plt.plot(xpoints, ypoints)
-plt.scatter(lon[0], lat[0], color='g')
-plt.scatter(lon[-1], lat[-1], color='r')
+
+# xpoints = np.array([32.289752,32.290667,32.2929,32.295535,32.314405,32.318839])
+# ypoints = np.array([35.508206,35.495939,35.501812,35.515418,35.506976,35.505558])
+# plt.plot(xpoints, ypoints)
+# plt.scatter(lon[0], lat[0], color='g')
+# plt.scatter(lon[-1], lat[-1], color='r')
 
 plt.show()
 
