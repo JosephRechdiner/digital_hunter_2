@@ -1,0 +1,16 @@
+from fastapi import FastAPI
+from contextlib import asynccontextmanager
+from app.db_connection import MysqlManager
+from app.routes import router
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Function that runs as server comes up.
+    initialize app instances
+    """
+    app.state.mysql_manager = MysqlManager()
+    yield
+
+app = FastAPI(lifespan=lifespan)
+app.include_router(router)
